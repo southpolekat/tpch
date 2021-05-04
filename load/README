@@ -41,3 +41,17 @@ About Amazon Machines
 
     % ssh -i path-to-pem-file ubuntu@IP-ADDR
 
+Generate small set for testing locally
+  cd ~/p/tpch/dbgen
+  make
+  ./dbgen -f
+  gzip -f *.tbl
+  
+  cd ~/p/tpch/load
+  xdrctl deploy xdrive.toml
+  xdrctl start xdrive.toml
+  createdb tpch
+  psql tpch -f dss.ddl.float
+  psql tpch -f extab.ddl
+  psql tpch -f zlibload.sql
+  

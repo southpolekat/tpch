@@ -1,0 +1,8 @@
+[xdrive]
+dir = "/home/ubuntu/xdrive"
+port = 7171
+host = ["localhost"]
+
+[[xdrive.mount]]
+name = "tpch"
+argv = ["xdr_fs/xdr_fs", "csv", "/home/ubuntu/p/tpch/dbgen"]
