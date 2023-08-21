@@ -1,4 +1,3 @@
-USE kite.default;
 
 DROP VIEW IF EXISTS revenue0;
 DROP VIEW IF EXISTS q15;

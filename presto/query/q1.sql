@@ -1,5 +1,3 @@
-USE kite.default;
-
 DROP VIEW IF EXISTS q1;
 
 CREATE VIEW q1 as 

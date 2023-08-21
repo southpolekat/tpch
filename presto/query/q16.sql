@@ -1,4 +1,3 @@
-USE kite.default;
 
 DROP VIEW IF EXISTS q16;
 
