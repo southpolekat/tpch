@@ -1,4 +1,4 @@
-USE kite.default;
+USE memory.default;
 
 DROP TABLE IF EXISTS NATION;
 DROP TABLE IF EXISTS REGION;
@@ -14,17 +14,13 @@ CREATE TABLE NATION (
    N_NAME VARCHAR(25),
    N_REGIONKEY BIGINT,
    N_COMMENT VARCHAR(152) )
-WITH ( 
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/nation.*');
+	;
 
 CREATE TABLE REGION (
 	R_REGIONKEY BIGINT,
    R_NAME VARCHAR(25),
    R_COMMENT VARCHAR(152) )
-WITH ( 
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/region.*');
+	;
 
 CREATE TABLE PART (
 	P_PARTKEY BIGINT,
@@ -36,9 +32,7 @@ CREATE TABLE PART (
    P_CONTAINER VARCHAR(10),
    P_RETAILPRICE DOUBLE,
    P_COMMENT   VARCHAR(23) )
-WITH ( 
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/part.*');
+	;
 
 CREATE TABLE SUPPLIER (
 	S_SUPPKEY BIGINT,
@@ -48,9 +42,7 @@ CREATE TABLE SUPPLIER (
    S_PHONE VARCHAR(15),
    S_ACCTBAL DOUBLE,
    S_COMMENT VARCHAR(101) )
-WITH ( 
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/supplier.*');
+	;
 
 CREATE TABLE PARTSUPP (
 PS_PARTKEY BIGINT,
@@ -58,9 +50,7 @@ PS_PARTKEY BIGINT,
    PS_AVAILQTY INTEGER,
    PS_SUPPLYCOST DOUBLE,
    PS_COMMENT VARCHAR(199) )
-WITH ( 
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/partsupp.*');
+	;
 
 CREATE TABLE CUSTOMER (	
 	C_CUSTKEY BIGINT,
@@ -71,9 +61,7 @@ CREATE TABLE CUSTOMER (
 	C_ACCTBAL DOUBLE,
 	C_MKTSEGMENT VARCHAR(10),
 	C_COMMENT VARCHAR(117) )
-WITH ( 
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/customer.*');
+	;
 
 CREATE TABLE ORDERS (
 	O_ORDERKEY BIGINT,
@@ -85,9 +73,7 @@ CREATE TABLE ORDERS (
    O_CLERK VARCHAR(15), 
    O_SHIPPRIORITY INTEGER,
    O_COMMENT VARCHAR(79) )
-WITH ( 
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/orders.*');
+	;
 
 CREATE TABLE LINEITEM ( 
    L_ORDERKEY   BIGINT,
@@ -106,6 +92,4 @@ CREATE TABLE LINEITEM (
    L_SHIPINSTRUCT VARCHAR(25),
    L_SHIPMODE   VARCHAR(10),
    L_COMMENT   VARCHAR(44) )
-WITH (
-	FORMAT='CSV', CSV_DELIM='|', 
-	LOCATION='kite://kite1:7878/vitessedata-public/tpch/sf1/csv/lineitem.*');
+	;
