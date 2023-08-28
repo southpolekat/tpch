@@ -5,11 +5,11 @@ CREATE VIEW q17 as
 select
 	sum(l_extendedprice) / 7.0 as avg_yearly
 from
-	lineitem,
-	part, 
+	LINEITEM,
+	PART, 
 	( select l_partkey as f_partkey, 
 		cast(0.2 as double) * (sum(l_quantity) / count(l_quantity)) as f_qnt
-	 from lineitem 
+	 from LINEITEM 
 	 group by 1) foo
 where
 	p_partkey = l_partkey

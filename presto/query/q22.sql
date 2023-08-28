@@ -12,7 +12,7 @@ from
 			substring(c_phone from 1 for 2) as cntrycode,
 			c_acctbal
 		from
-			customer
+			CUSTOMER	
 		where
 			substring(c_phone from 1 for 2) in
 				('10', '11', '26', '22', '19', '20', '27')
@@ -20,7 +20,7 @@ from
 				select
 					sum(c_acctbal) / count(c_acctbal)	
 				from
-					customer
+					CUSTOMER	
 				where
 					c_acctbal > 0.00
 					and substring(c_phone from 1 for 2) in
@@ -30,7 +30,7 @@ from
 				select
 					*
 				from
-					orders
+					ORDERS
 				where
 					o_custkey = c_custkey
 			)

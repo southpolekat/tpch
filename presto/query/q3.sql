@@ -8,9 +8,9 @@ select
 	o_orderdate,
 	o_shippriority
 from
-	customer,
-	orders,
-	lineitem
+	CUSTOMER,
+	ORDERS,
+	LINEITEM	
 where
 	c_mktsegment = 'HOUSEHOLD'
 	and c_custkey = o_custkey

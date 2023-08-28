@@ -2,8 +2,56 @@
 
 source env.sh
 
-echo "### Create views in memory.default"
+function setup_catalog_kite {
+echo "############# Catalog Kite"
+echo "### Create tables"
+${PRESTO_CLI} -f catalog/kite/tables.ddl
+echo "### Count rows"
+${PRESTO_CLI} --catalog kite --schema default -f query/counts.ddl
+echo "### Create views"
+for i in {1..22}
+do
+   $PRESTO_CLI --catalog kite --schema default -f query/q${i}.sql
+done
+}
+
+function setup_catalog_memory {
+echo "############# Catalog Memory"
+echo "### Create tables"
+${PRESTO_CLI} -f catalog/memory/tables.ddl
+echo "### Load data"
+${PRESTO_CLI} -f catalog/memory/load_data.sql
+echo "### Count rows"
+${PRESTO_CLI} --catalog memory --schema default -f query/counts.ddl
+echo "### Create views"
 for i in {1..22}
 do
 	$PRESTO_CLI --catalog memory --schema default -f query/q${i}.sql	
 done
+}
+
+function setup_schema_mixed {
+echo "### Create schema mixed"
+${PRESTO_CLI} -f catalog/memory/schema_mixed.sql
+echo "### Create views"
+for i in {1..22}
+do
+	tmpq=/tmp/tmp_q.sql
+   cat query/q${i}.sql \
+		| sed -e "s/NATION/memory.default.nation/" \
+		| sed -e "s/REGION/memory.default.region/" \
+		| sed -e "s/PART/memory.default.part/" \
+		| sed -e "s/SUPPLIER/memory.default.supplier/" \
+		| sed -e "s/PARTSUPP/memory.default.partsupp/" \
+		| sed -e "s/CUSTOMER/memory.default.customer/" \
+		| sed -e "s/ORDERS/memory.default.orders/" \
+		| sed -e "s/LINEITEM/kite.default.lineitem/" \
+		> $tmpq
+
+	$PRESTO_CLI --catalog memory --schema mixed -f $tmpq
+done
+} 
+
+#setup_catalog_kite
+#setup_catalog_memory
+setup_schema_mixed

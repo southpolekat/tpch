@@ -6,7 +6,7 @@ select
 	o_orderpriority,
 	count(*) as order_count
 from
-	orders
+	ORDERS	
 where
 	o_orderdate >= date '1997-07-01'
 	and o_orderdate < date '1997-07-01' + interval '3' month
@@ -14,7 +14,7 @@ where
 		select
 			*
 		from
-			lineitem
+			LINEITEM
 		where
 			l_orderkey = o_orderkey
 			and l_commitdate < l_receiptdate

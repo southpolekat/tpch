@@ -19,6 +19,7 @@ Update the varibles in env.sh if necessary
 
 # Run tpch quries
 ```
-./run.sh kite 
-./run.sh default
+./run.sh kite default
+./run.sh memory default
+./run.sh memory mixed
 ```

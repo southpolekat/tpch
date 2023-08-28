@@ -12,18 +12,18 @@ select
 	s_phone,
 	s_comment
 from
-	part,
-	supplier,
-	partsupp,
-	nation,
-	region,
+	PART,
+	SUPPLIER,
+	PARTSUPP,
+	NATION,
+	REGION,
 	(select ps_partkey as f_partkey,
 		min(ps_supplycost) as f_mincost
 		from
-			partsupp,
-			supplier,
-			nation,
-			region
+			PARTSUPP,
+			SUPPLIER,
+			NATION,
+			REGION	
 		where
 			s_suppkey = ps_suppkey
 			and s_nationkey = n_nationkey

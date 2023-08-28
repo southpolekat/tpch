@@ -13,7 +13,7 @@ select
 	sum(l_discount)/count(l_discount) as avg_disc,
 	count(*) as count_order
 from
-	lineitem
+	LINEITEM
 where
 	l_shipdate <= date '1998-12-01' - interval '112' day
 group by
