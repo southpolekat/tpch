@@ -5,7 +5,11 @@ source env.sh
 function setup_catalog_kite {
 echo "############# Catalog Kite"
 echo "### Create tables"
-${PRESTO_CLI} -f catalog/kite/tables.ddl
+cat catalog/kite/tables.ddl \
+	| sed -e "s/KITE_LOC/$KITE_LOC/" \
+	| sed -e "s/TPCH_SF/sf$TPCH_SF/" \
+	> /tmp/kite_tables.ddl
+${PRESTO_CLI} -f /tmp/kite_tables.ddl 
 echo "### Count rows"
 ${PRESTO_CLI} --catalog kite --schema default -f query/counts.ddl
 echo "### Create views"
@@ -52,6 +56,6 @@ do
 done
 } 
 
-#setup_catalog_kite
-#setup_catalog_memory
+setup_catalog_kite
+setup_catalog_memory
 setup_schema_mixed
