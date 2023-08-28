@@ -2,6 +2,8 @@
 
 catalog=${1:-kite}
 schema=${2:-default}
+query=${3:-all}
+
 outpath=/tmp/tpch_presto_out
 
 mkdir -p $outpath
@@ -10,6 +12,8 @@ source env.sh
 
 for i in {1..22};
 do
+	[ $query != "all" ] && [ $query != "q${i}" ] && continue
+
 	t1=$(($(date +%s%N)/1000000))
 
 	OUT=$outpath/q${i}.out
