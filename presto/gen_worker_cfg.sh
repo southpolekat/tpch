@@ -17,6 +17,7 @@ do
 	dst=${etc}/p${i}
 	port=$(( 8080 + $i ))	
 
+	mkdir -p ${dst}
 	mkdir -p ${PRESTO_DATA}/p${i}
 
 	cp -r ${p0}/* ${dst}/.
