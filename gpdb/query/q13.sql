@@ -13,7 +13,7 @@ from
 		from
 			CUSTOMER left outer join ORDERS on
 				c_custkey = o_custkey
-				and o_comment != /*not like*/ '%pending%accounts%'
+				and o_comment not like '%pending%accounts%'
 		group by
 			c_custkey
 	) as c_orders (c_custkey, c_count)
