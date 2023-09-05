@@ -4,7 +4,7 @@ ctl=${1:-start} # Commands: run, start, stop, restart, kill, status
 
 source ./env.sh
 
-n=$(( $NUM_WORKER - 1 ))
+n=$(( $NUM_WORKER ))
 
 for i in $(seq 0 $n);
 do
