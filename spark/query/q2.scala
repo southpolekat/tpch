@@ -1,0 +1,52 @@
+val start = LocalDateTime.now()
+
+spark.sql("""
+select
+	s_acctbal,
+	s_name,
+	n_name,
+	p_partkey,
+	p_mfgr,
+	s_address,
+	s_phone,
+	s_comment
+from
+	PART,
+	SUPPLIER,
+	PARTSUPP,
+	NATION,
+	REGION,
+	(select ps_partkey as f_partkey,
+		min(ps_supplycost) as f_mincost
+		from
+			PARTSUPP,
+			SUPPLIER,
+			NATION,
+			REGION	
+		where
+			s_suppkey = ps_suppkey
+			and s_nationkey = n_nationkey
+			and n_regionkey = r_regionkey
+			and r_name = 'MIDDLE EAST'
+		group by 1) foo
+where
+	p_partkey = ps_partkey
+	and s_suppkey = ps_suppkey
+	and p_size = 9
+	and p_type like '%TIN'
+	and s_nationkey = n_nationkey
+	and n_regionkey = r_regionkey
+	and r_name = 'MIDDLE EAST'
+	and ps_supplycost = f_mincost
+	and p_partkey = f_partkey
+;
+"""
+).show()
+
+val end = LocalDateTime.now()
+val duration = Duration.between(start, end)
+
+println("Time: " + duration.toMillis() + " ms")
+
+sys.exit
+
