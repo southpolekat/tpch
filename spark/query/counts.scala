@@ -1,4 +1,4 @@
 for (n <- names) {
-  spark.sql("select count(*) from " + n).show()
+  spark.sql("select '" + n + "', count(*) from " + n).show()
 }
 sys.exit
