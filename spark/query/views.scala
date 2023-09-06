@@ -3,6 +3,17 @@ import org.apache.spark.sql.types.{IntegerType, StringType, StructType, StructFi
 import java.time.LocalDateTime
 import java.time.Duration
 
+val schemaNation = StructType(Array(
+  StructField("N_NATIONKEY", LongType),
+  StructField("N_NAME", StringType),
+  StructField("N_REGIONKEY", LongType),
+  StructField("N_COMMENT", StringType)))
+
+val schemaRegion = StructType(Array(
+  StructField("R_REGIONKEY", LongType),
+  StructField("R_NAME", StringType),
+  StructField("R_COMMENT", StringType)))
+
 val schemaLineitem = StructType(Array(
     StructField("l_orderkey", LongType),
     StructField("l_partkey", LongType),
@@ -21,13 +32,22 @@ val schemaLineitem = StructType(Array(
     StructField("l_shipmode", StringType),
     StructField("l_comment", StringType)))
 
-val dfrLineitem = spark.read.format("kite").schema(schemaLineitem)
+val schemas = List(schemaNation, schemaRegion, schemaLineitem)
+val names = List("nation", "region", "lineitem")
+
+var i = 0
+for (s <- schemas) {
+  print("Create view " + names(i) + "\n")
+  val dfr = spark.read.format("kite").schema(s)
         .option("host", "51a81ebac1c3:7878")
-        .option("path", "vitessedata-public/tpch/sf1/csv/lineitem*")
+        .option("path", "vitessedata-public/tpch/sf1/csv/" + names(i) + "*")
         .option("filespec", "csv")
         .option("csv_delim", "|")
         .option("fragcnt", 32)
 
-val dfLineitem = dfrLineitem.load()
+  val df = dfr.load()
 
-dfLineitem.createOrReplaceTempView("lineitem")
+  df.createOrReplaceTempView(names(i))
+
+  i = i + 1
+}
