@@ -1,0 +1,49 @@
+val start = LocalDateTime.now()
+
+spark.sql("""
+select
+	cntrycode,
+	count(*) as numcust,
+	sum(c_acctbal) as totacctbal
+from
+	(
+		select
+			substring(c_phone from 1 for 2) as cntrycode,
+			c_acctbal
+		from
+			CUSTOMER	
+		where
+			substring(c_phone from 1 for 2) in
+				('10', '11', '26', '22', '19', '20', '27')
+			and c_acctbal > (
+				select
+					sum(c_acctbal) / count(c_acctbal)	
+				from
+					CUSTOMER	
+				where
+					c_acctbal > 0.00
+					and substring(c_phone from 1 for 2) in
+						('10', '11', '26', '22', '19', '20', '27')
+			)
+			and not exists (
+				select
+					*
+				from
+					ORDERS
+				where
+					o_custkey = c_custkey
+			)
+	) as custsale
+group by
+	cntrycode
+;
+"""
+).show()
+
+val end = LocalDateTime.now()
+val duration = Duration.between(start, end)
+
+println("Time: " + duration.toMillis() + " ms")
+
+sys.exit
+
