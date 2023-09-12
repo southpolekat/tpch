@@ -19,6 +19,20 @@ do
 done
 }
 
+function setup_catalog_hive {
+echo "############# Catalog Hive"
+echo "### Create tables"
+cat catalog/hive/tables.ddl \
+        | sed -e "s/TPCH_SF/sf$TPCH_SF/" \
+        > /tmp/hive_tables.ddl
+${PRESTO_CLI} -f /tmp/hive_tables.ddl
+echo "### Count rows"
+${PRESTO_CLI} --catalog hive --schema tpch --execute "select count(*) from lineitem;" 
+echo "### Create views"
+${PRESTO_CLI} --catalog hive --schema tpch -f query/q1.sql
+${PRESTO_CLI} --catalog hive --schema tpch -f query/q6.sql
+}
+
 function setup_catalog_memory {
 echo "############# Catalog Memory"
 echo "### Create tables"
@@ -56,6 +70,7 @@ do
 done
 } 
 
+setup_catalog_hive
 setup_catalog_kite
-setup_catalog_memory
-setup_schema_mixed
+#setup_catalog_memory
+#setup_schema_mixed

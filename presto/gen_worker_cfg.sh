@@ -9,6 +9,7 @@ p0=${etc}/p0
 
 cp catalog/kite/kite.properties ${p0}/catalog/
 cp catalog/memory/memory.properties ${p0}/catalog/
+cp catalog/hive/hive.properties ${p0}/catalog/
 
 for i in $(seq 1 $n);
 do
