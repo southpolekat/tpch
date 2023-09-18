@@ -21,6 +21,9 @@ function setup_schema_kite {
 		| sed -e "s/TPCH_SF/sf$TPCH_SF/" \
 		| PGOPTIONS=${opts2} $psql
 
+	echo "### Analyze tables"
+	PGOPTIONS=${opts2} $psql -Atf query/analyze.sql
+
 	echo "### Count rows"
 	PGOPTIONS=${opts2} $psql -Atf query/counts.sql
 
@@ -48,6 +51,9 @@ function setup_schema_ao {
 	for t in $TABLES; do
 		PGOPTIONS=${opts2} $psql -c "insert into $t select * from $SCHEMA_KITE.$t;"
 	done
+
+   echo "### Analyze tables"
+   PGOPTIONS=${opts2} $psql -Atf query/analyze.sql
 
    echo "### Count rows"
    PGOPTIONS=${opts2} $psql -Atf query/counts.sql
