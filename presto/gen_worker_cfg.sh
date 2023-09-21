@@ -1,14 +1,14 @@
 #!/bin/bash
 
-source env.sh
+source ../env.sh
 
-n=$(( $NUM_WORKER )) 	# number of workers (exluding p0)
+n=$(( $PRESTO_WORKER )) 	# number of workers (exluding p0)
 
 etc=$PRESTO_HOME/etc
 p0=${etc}/p0
 
 cp catalog/kite/kite.properties ${p0}/catalog/
-cp catalog/memory/memory.properties ${p0}/catalog/
+#cp catalog/memory/memory.properties ${p0}/catalog/
 cp catalog/hive/hive.properties ${p0}/catalog/
 
 for i in $(seq 1 $n);

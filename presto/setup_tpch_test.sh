@@ -1,22 +1,28 @@
 #!/bin/bash
 
-source env.sh
+source ../env.sh
+
+mkdir -p $OUTDIR/presto
 
 function setup_catalog_kite {
-echo "############# Catalog Kite"
-echo "### Create tables"
-cat catalog/kite/tables.ddl \
-	| sed -e "s/KITE_LOC/$KITE_LOC/" \
-	| sed -e "s/TPCH_SF/sf$TPCH_SF/" \
-	> /tmp/kite_tables.ddl
-${PRESTO_CLI} -f /tmp/kite_tables.ddl 
-echo "### Count rows"
-${PRESTO_CLI} --catalog kite --schema default -f query/counts.ddl
-echo "### Create views"
-for i in {1..22}
-do
-   $PRESTO_CLI --catalog kite --schema default -f query/q${i}.sql
-done
+	catalog=kite
+	schema=default
+	echo "############# Catalog Kite"
+	echo "### Create table(s)"
+	for t in "${TPCH_TABLES[@]}"; do
+		echo "### ... $t"
+		cat catalog/kite/schema/$t.ddl \
+			| sed -e "s/KITE_LOCATION/$KITE_LOCATION/" \
+   		| sed -e "s/TPCH_SF/sf$TPCH_SF/" \
+   		| sed -e "s/DATA_FORMAT/$DATA_FORMAT/" \
+			> $OUTDIR/presto/$t.ddl
+			${PRESTO_CLI} --catalog $catalog --schema $schema -f $OUTDIR/presto/$t.ddl 
+	done
+	echo "### Create table(s)"
+	for q in "${TPCH_QUERIES[@]}"; do
+      echo "### ... $q"
+   	$PRESTO_CLI --catalog $catalog --schema $schema -f query/$q.sql
+	done
 }
 
 function setup_catalog_hive {
@@ -70,7 +76,7 @@ do
 done
 } 
 
-setup_catalog_hive
+#setup_catalog_hive
 setup_catalog_kite
 #setup_catalog_memory
 #setup_schema_mixed
