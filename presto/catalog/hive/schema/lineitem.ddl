@@ -18,7 +18,7 @@ CREATE TABLE LINEITEM (
    L_SHIPMODE   VARCHAR(10),
    L_COMMENT   VARCHAR(44) )
 WITH (
-	FORMAT='DATA_FORMAT',
-	external_location='s3://vitessedata-public/tpch/TPCH_SF/DATA_FORMAT/lineitem/'
+	FORMAT=':DATA_FORMAT',
+	external_location='s3://vitessedata-public/tpch/:TPCH_SF/:DATA_FORMAT/lineitem/'
 )
 ;

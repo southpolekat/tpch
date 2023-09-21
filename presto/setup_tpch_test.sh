@@ -8,17 +8,24 @@ function setup_catalog_kite {
 	catalog=kite
 	schema=default
 	echo "############# Catalog Kite"
+
 	echo "### Create table(s)"
 	for t in "${TPCH_TABLES[@]}"; do
 		echo "### ... $t"
 		cat catalog/$catalog/schema/$t.ddl \
-			| sed -e "s/KITE_LOCATION/$KITE_LOCATION/" \
-   		| sed -e "s/TPCH_SF/sf$TPCH_SF/" \
-   		| sed -e "s/DATA_FORMAT/$DATA_FORMAT/" \
+			| sed -e "s/:KITE_LOCATION/$KITE_LOCATION/" \
+   		| sed -e "s/:TPCH_SF/sf$TPCH_SF/" \
+   		| sed -e "s/:DATA_FORMAT/$DATA_FORMAT/" \
 			> $OUTDIR/presto/$t.ddl
 			${PRESTO_CLI} --catalog $catalog --schema $schema -f $OUTDIR/presto/$t.ddl 
 	done
-	echo "### Create table(s)"
+
+   echo "### count table(s)"
+   for t in "${TPCH_TABLES[@]}"; do
+		${PRESTO_CLI} --catalog $catalog --schema $schema -f $OUTDIR/presto/$t.ddl
+   done
+
+	echo "### Create view(s)"
 	for q in "${TPCH_QUERIES[@]}"; do
       echo "### ... $q"
    	$PRESTO_CLI --catalog $catalog --schema $schema -f query/$q.sql
@@ -35,9 +42,9 @@ function setup_catalog_hive {
    for t in "${TPCH_TABLES[@]}"; do
       echo "### ... $t"
       cat catalog/$catalog/schema/$t.ddl \
-         | sed -e "s/KITE_LOCATION/$KITE_LOCATION/" \
-         | sed -e "s/TPCH_SF/sf$TPCH_SF/" \
-         | sed -e "s/DATA_FORMAT/$DATA_FORMAT/" \
+         | sed -e "s/:KITE_LOCATION/$KITE_LOCATION/" \
+         | sed -e "s/:TPCH_SF/sf$TPCH_SF/" \
+         | sed -e "s/:DATA_FORMAT/$DATA_FORMAT/" \
          > $OUTDIR/presto/$t.ddl
          ${PRESTO_CLI} --catalog $catalog --schema $schema -f $OUTDIR/presto/$t.ddl
    done
@@ -98,6 +105,6 @@ done
 } 
 
 setup_catalog_hive
-#setup_catalog_kite
+setup_catalog_kite
 #setup_catalog_memory
 #setup_schema_mixed
