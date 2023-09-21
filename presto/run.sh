@@ -1,29 +1,25 @@
 #!/bin/bash
 
-catalog=${1:-kite}
+source ../env.sh
+
+catalog=${1:-kite}		# kite, hive
 schema=${2:-default}
 query=${3:-all}
 
-outpath=/tmp/tpch_presto_out
+log=$PRESTO_DATA/p0/var/log/server.log
 
-mkdir -p $outpath
+mkdir -p $OUTDIR/presto
 
-source env.sh
+for q in "${TPCH_QUERIES[@]}"; do
+	[ $query != "all" ] && [ $query != "$q" ] && continue
 
-for i in {1..22};
-do
-	[ $query != "all" ] && [ $query != "q${i}" ] && continue
-
-	t1=$(($(date +%s%N)/1000000))
-
-	OUT=$outpath/q${i}.out
+	OUT=$OUTDIR/presto/$q.out
 
 	$PRESTO_CLI --catalog $catalog --schema $schema \
-		--execute "select * from q${i};" > $OUT
+		--execute "select * from $q;" > $OUT
 
-	t2=$(($(date +%s%N)/1000000))
+	sleep 2
+	dur=`grep elapsed $log | tail -1 | sed -e "s/.*elapsed //" | sed -e "s/ms .*//"`
 
-	dur=$(( $t2 - $t1 ))
-
-	echo "q${i} $dur ms"
+	echo "$q $dur ms"
 done
