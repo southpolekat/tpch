@@ -11,7 +11,7 @@ function setup_catalog_kite {
 	echo "### Create table(s)"
 	for t in "${TPCH_TABLES[@]}"; do
 		echo "### ... $t"
-		cat catalog/kite/schema/$t.ddl \
+		cat catalog/$catalog/schema/$t.ddl \
 			| sed -e "s/KITE_LOCATION/$KITE_LOCATION/" \
    		| sed -e "s/TPCH_SF/sf$TPCH_SF/" \
    		| sed -e "s/DATA_FORMAT/$DATA_FORMAT/" \
@@ -26,6 +26,27 @@ function setup_catalog_kite {
 }
 
 function setup_catalog_hive {
+   catalog=hive
+   schema=default
+   echo "############# Catalog Hive"
+   echo "### Create schema hive.default"
+	$PRESTO_CLI --execute "CREATE SCHEMA IF NOT EXISTS $catalog.$schema"
+   echo "### Create table(s)"
+   for t in "${TPCH_TABLES[@]}"; do
+      echo "### ... $t"
+      cat catalog/$catalog/schema/$t.ddl \
+         | sed -e "s/KITE_LOCATION/$KITE_LOCATION/" \
+         | sed -e "s/TPCH_SF/sf$TPCH_SF/" \
+         | sed -e "s/DATA_FORMAT/$DATA_FORMAT/" \
+         > $OUTDIR/presto/$t.ddl
+         ${PRESTO_CLI} --catalog $catalog --schema $schema -f $OUTDIR/presto/$t.ddl
+   done
+   echo "### Create table(s)"
+   for q in "${TPCH_QUERIES[@]}"; do
+      echo "### ... $q"
+      $PRESTO_CLI --catalog $catalog --schema $schema -f query/$q.sql
+   done
+exit
 echo "############# Catalog Hive"
 echo "### Create tables"
 cat catalog/hive/tables.ddl \
@@ -76,7 +97,7 @@ do
 done
 } 
 
-#setup_catalog_hive
-setup_catalog_kite
+setup_catalog_hive
+#setup_catalog_kite
 #setup_catalog_memory
 #setup_schema_mixed

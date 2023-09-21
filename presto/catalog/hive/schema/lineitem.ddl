@@ -1,11 +1,4 @@
-Drop view if exists hive.tpch.q1;
-Drop view if exists hive.tpch.q6;
-Drop table if exists hive.tpch.lineitem;
-Drop schema if exists hive.tpch;
-
-CREATE SCHEMA hive.tpch; 
-
-Use hive.tpch;
+Drop table if exists lineitem;
 
 CREATE TABLE LINEITEM ( 
    L_ORDERKEY   BIGINT,
@@ -25,7 +18,7 @@ CREATE TABLE LINEITEM (
    L_SHIPMODE   VARCHAR(10),
    L_COMMENT   VARCHAR(44) )
 WITH (
-	FORMAT='parquet',
-	external_location='s3://vitessedata-public/tpch/TPCH_SF/par/'
+	FORMAT='DATA_FORMAT',
+	external_location='s3://vitessedata-public/tpch/TPCH_SF/DATA_FORMAT/lineitem/'
 )
 ;
