@@ -22,7 +22,8 @@ function setup_catalog_kite {
 
    echo "### count table(s)"
    for t in "${TPCH_TABLES[@]}"; do
-		${PRESTO_CLI} --catalog $catalog --schema $schema -f $OUTDIR/presto/$t.ddl
+		${PRESTO_CLI} --catalog $catalog --schema $schema \
+			--execute "select '$t', count(*) from $t" 
    done
 
 	echo "### Create view(s)"
@@ -46,25 +47,21 @@ function setup_catalog_hive {
          | sed -e "s/:TPCH_SF/sf$TPCH_SF/" \
          | sed -e "s/:DATA_FORMAT/$DATA_FORMAT/" \
          > $OUTDIR/presto/$t.ddl
-         ${PRESTO_CLI} --catalog $catalog --schema $schema -f $OUTDIR/presto/$t.ddl
+   	${PRESTO_CLI} --catalog $catalog --schema $schema \
+			--user ${PRESTO_USER} -f $OUTDIR/presto/$t.ddl
    done
-   echo "### Create table(s)"
+
+   echo "### count table(s)"
+   for t in "${TPCH_TABLES[@]}"; do
+      ${PRESTO_CLI} --catalog $catalog --schema $schema \
+         --execute "select '$t', count(*) from $t"
+   done
+
+   echo "### Create view(s)"
    for q in "${TPCH_QUERIES[@]}"; do
       echo "### ... $q"
       $PRESTO_CLI --catalog $catalog --schema $schema -f query/$q.sql
    done
-exit
-echo "############# Catalog Hive"
-echo "### Create tables"
-cat catalog/hive/tables.ddl \
-        | sed -e "s/TPCH_SF/sf$TPCH_SF/" \
-        > /tmp/hive_tables.ddl
-${PRESTO_CLI} -f /tmp/hive_tables.ddl
-echo "### Count rows"
-${PRESTO_CLI} --catalog hive --schema tpch --execute "select count(*) from lineitem;" 
-echo "### Create views"
-${PRESTO_CLI} --catalog hive --schema tpch -f query/q1.sql
-${PRESTO_CLI} --catalog hive --schema tpch -f query/q6.sql
 }
 
 function setup_catalog_memory {
