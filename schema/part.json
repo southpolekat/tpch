@@ -1,0 +1,11 @@
+{
+	"P_PARTKEY" : "int64",
+	"P_NAME" : "string",
+	"P_MFGR" : "string",
+	"P_BRAND" : "string",
+	"P_TYPE" : "string",
+	"P_SIZE" : "int32",
+	"P_CONTAINER" : "string",
+	"P_RETAILPRICE" : "float64",
+	"P_COMMENT" : "string"
+}

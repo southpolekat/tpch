@@ -1,0 +1,6 @@
+{
+	"N_NATIONKEY" : "int64",
+   "N_NAME" : "string",
+   "N_REGIONKEY" : "int64",
+   "N_COMMENT" : "string"
+}

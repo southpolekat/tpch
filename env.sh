@@ -24,3 +24,10 @@ export PRESTO_USER=presto
 # number of presto workers NOT including coordinator (p0)	
 export PRESTO_WORKER=8
 
+############################# Greenplum 
+# All tables are internal append-optimized
+export GP_SCHEMA_AO=ao
+# All tables are external kite tables
+export GP_SCHEMA_KITE=kite
+# Views use all internal tables except lineitem 
+export GP_SCHEMA_MIXED=mixed

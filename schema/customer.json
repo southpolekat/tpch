@@ -1,0 +1,10 @@
+{
+	"C_CUSTKEY" : "int64",
+	"C_NAME" : "string",
+	"C_ADDRESS" : "string",
+	"C_NATIONKEY" : "int64",
+	"C_PHONE" : "string",
+	"C_ACCTBAL" : "float64",
+	"C_MKTSEGMENT" : "string",
+	"C_COMMENT" : "string"
+}

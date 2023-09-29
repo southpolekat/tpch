@@ -1,0 +1,18 @@
+{
+	"L_ORDERKEY" : "int64",
+	"L_PARTKEY" : "int64",
+	"L_SUPPKEY" : "int64",
+	"L_LINENUMBER" : "int64",
+	"L_QUANTITY" : "float64",
+	"L_EXTENDEDPRICE" : "float64",
+	"L_DISCOUNT" : "float64",
+	"L_TAX" : "float64",
+	"L_RETURNFLAG" : "string",
+	"L_LINESTATUS" : "string",
+	"L_SHIPDATE" : "datetime64",
+	"L_COMMITDATE" : "datetime64",
+	"L_RECEIPTDATE" : "datetime64",
+	"L_SHIPINSTRUCT" : "string",
+	"L_SHIPMODE" : "string",
+	"L_COMMENT" : "string"
+}

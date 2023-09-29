@@ -1,0 +1,5 @@
+{
+   "R_REGIONKEY" : "int64",
+   "R_NAME" : "string",
+   "R_COMMENT" : "string"
+}

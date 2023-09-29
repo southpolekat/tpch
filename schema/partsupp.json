@@ -1,0 +1,7 @@
+{
+	"PS_PARTKEY" : "int64",
+	"PS_SUPPKEY" : "int64",
+	"PS_AVAILQTY" : "int32",
+	"PS_SUPPLYCOST" : "float64",
+	"PS_COMMENT" : "string"
+} 

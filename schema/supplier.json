@@ -1,0 +1,9 @@
+{
+	"S_SUPPKEY" : "int64",
+	"S_NAME" : "string",
+	"S_ADDRESS" : "string",
+	"S_NATIONKEY" : "int64",
+	"S_PHONE" : "string",
+	"S_ACCTBAL" : "float64",
+	"S_COMMENT" : "string"
+}

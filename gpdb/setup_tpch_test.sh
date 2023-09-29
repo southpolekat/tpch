@@ -1,12 +1,12 @@
 #!/bin/bash
 
-source env.sh
+source ../env.sh
 
 opts="-c client_min_messages=warning" # for PGOPTIONS
 psql="psql -v ON_ERROR_STOP=1 -q"
 
 function setup_schema_kite {
-	schema=$SCHEMA_KITE
+	schema=$GP_SCHEMA_KITE
 	echo "############# Schema $schema"
 
 	echo "### Recreate schema"
@@ -17,8 +17,9 @@ function setup_schema_kite {
 
 	echo "### Create external tables"
 	cat schema/kite/tables.ddl \
-		| sed -e "s/KITE_LOC/$KITE_LOC/" \
-		| sed -e "s/TPCH_SF/sf$TPCH_SF/" \
+		| sed -e "s/:KITE_LOCATION/$KITE_LOCATION/" \
+		| sed -e "s/:TPCH_SF/sf$TPCH_SF/" \
+		| sed -e "s/:DATA_FORMAT/$DATA_FORMAT/" \
 		| PGOPTIONS=${opts2} $psql
 
 	echo "### Analyze tables"
@@ -90,5 +91,5 @@ function setup_schema_mixed {
 }
 
 setup_schema_kite
-setup_schema_ao
-setup_schema_mixed
+#setup_schema_ao
+#setup_schema_mixed
