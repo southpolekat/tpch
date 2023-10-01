@@ -22,7 +22,7 @@ def convert_csv_to_parquet(in_schema, in_csv, out_parquet):
 		dtype_backend='pyarrow',
 		parse_dates=True) 
 	df.columns = schema.keys()
-	df.astype(schema)
+	df = df.astype(schema)
 
 	df = df.dropna(axis=1)
 
