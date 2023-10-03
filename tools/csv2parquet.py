@@ -5,8 +5,11 @@ import json
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
+import pyarrow.csv as pc
+import fastparquet as fp
+import datetime
 
-debug = 1
+debug = 0
 
 def convert_csv_to_parquet(in_schema, in_csv, out_parquet):
 
@@ -15,39 +18,37 @@ def convert_csv_to_parquet(in_schema, in_csv, out_parquet):
 	data = f.read()
 	schema = json.loads(data)
 
-	# read csv
-	df = pd.read_csv(in_csv, sep='|', header=None, 
-		#dtype=schema, 
-		engine='pyarrow',
-		dtype_backend='pyarrow',
-		parse_dates=True) 
-	df.columns = schema.keys()
-	df = df.astype(schema)
+	for c in schema:
+		if schema[c] == "date":
+			schema[c] = pa.date32()
 
-	df = df.dropna(axis=1)
+	csv_parse_options = pa.csv.ParseOptions(
+		delimiter = '|'
+	)
+	csv_read_options = pa.csv.ReadOptions(
+		column_names = schema.keys()
+	)
+	csv_convert_options = pc.ConvertOptions(
+		column_types = schema
+	)
 
-	# Convert Pandas DataFrame to PyArrow Table
-	table = pa.Table.from_pandas(df)
-
-	# Write PyArrow Table to Parquet file
-	pq.write_table(table, out_parquet, compression='none')
-
+	table = pc.read_csv(in_csv,
+		parse_options = csv_parse_options,
+		read_options = csv_read_options,
+		convert_options = csv_convert_options
+	)	
+	pq.write_table(table, out_parquet)
+	
 	if debug == 1:
 		print(schema,"\n")
+		df = table.to_pandas()
 		df.info()
-		print()
 		print(df.head(5))	
 	
-		# Open the Parquet file
 		table = pq.read_table(out_parquet)
-
-		# Convert the table to a Pandas DataFrame
 		df = table.to_pandas()
-		print()
 		df.info()
-		print()
 		print(df.head(5))	
-
 
 if __name__ == "__main__":
 

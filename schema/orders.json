@@ -3,7 +3,7 @@
 	"O_CUSTKEY" : "int64",
 	"O_ORDERSTATUS" : "string",
 	"O_TOTALPRICE" : "float64",
-	"O_ORDERDATE" : "datetime64[ns]",
+	"O_ORDERDATE" : "date",
 	"O_ORDERPRIORITY" : "string",  
 	"O_CLERK" : "string", 
 	"O_SHIPPRIORITY" : "int32",

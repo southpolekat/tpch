@@ -9,9 +9,9 @@
 	"L_TAX" : "float64",
 	"L_RETURNFLAG" : "string",
 	"L_LINESTATUS" : "string",
-	"L_SHIPDATE" : "datetime64[ns]",
-	"L_COMMITDATE" : "datetime64[ns]",
-	"L_RECEIPTDATE" : "datetime64[ns]",
+	"L_SHIPDATE" : "date",
+	"L_COMMITDATE" : "date",
+	"L_RECEIPTDATE" : "date",
 	"L_SHIPINSTRUCT" : "string",
 	"L_SHIPMODE" : "string",
 	"L_COMMENT" : "string"
