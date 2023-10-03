@@ -1,32 +1,26 @@
 #!/bin/bash
 
-source env.sh
+source ../env.sh
 
-schema=${1:-${SCHEMA_KITE}}
+schema=${1:-${GP_SCHEMA_KITE}}
 query=${2:-all}
 
-outpath=/tmp/tpch_gpdb_out
+mkdir -p $OUTDIR/gpdb
 
-mkdir -p $outpath
+for q in "${TPCH_QUERIES[@]}"; do
+   [ $query != "all" ] && [ $query != "$q" ] && continue
 
-for i in {1..22};
-do
-	#( [ $i -eq 2 ] || [ $i -eq 11 ] || [ $i -eq 13 ] || [ $i -eq 16 ] || [ $i -eq 22 ] ) && continue
+	IN=$OUTDIR/gpdb/$q.sql
+   OUT=$OUTDIR/gpdb/$q.out
 
-	[[ $(echo ${SKIP_QUERIES[@]} | fgrep -w q$i) ]] && continue
-	
-	[ $query != "all" ] && [ $query != "q${i}" ] && continue
+	echo '\timing on' > $IN
+	echo "select * from ${schema}.${q};" >> $IN
 
-	t1=$(($(date +%s%N)/1000000))
-
-	OUT=$outpath/q${i}.out
-
-	PGOPTIONS="--search_path=$schema" \
-		psql -c "select * from q${i};" > $OUT
+	PGOPTIONS="-c optimizer=0" psql -f $IN > $OUT 
 
 	t2=$(($(date +%s%N)/1000000))
 
-	dur=$(( $t2 - $t1 ))
+	dur=`grep Time $OUT | tail -1 | cut -d ' ' -f2`
 
-	echo "q${i} $dur ms"
+	echo "$q $dur ms"
 done
