@@ -16,11 +16,12 @@ do
 
 	OUT=$outpath/q${i}.out
 
-	spark-shell --master local[8] -i query/views.scala -i query/q${i}.scala
+	spark-shell --master local[32] -i query/views.scala -i query/q${i}.scala > $OUT
 	
 	t2=$(($(date +%s%N)/1000000))
 
 	dur=$(( $t2 - $t1 ))
+	dur=`grep Time $OUT | tail -1 | cut -f2 -d ' '`
 
 	echo "q${i} $dur ms"
 done

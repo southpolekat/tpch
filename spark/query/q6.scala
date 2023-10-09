@@ -1,4 +1,4 @@
-val start = LocalDateTime.now()
+//val start = LocalDateTime.now()
 
 spark.sql("""
 select

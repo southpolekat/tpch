@@ -24,6 +24,10 @@ export PRESTO_USER=presto
 # number of presto workers NOT including coordinator (p0)	
 export PRESTO_WORKER=8
 
+############################# SPARK 
+export SPARK_HOME=/opt/spark
+export SPARK_WORKER=32
+
 ############################# Greenplum 
 # All tables are internal append-optimized
 export GP_SCHEMA_AO=ao

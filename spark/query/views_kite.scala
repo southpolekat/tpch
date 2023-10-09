@@ -3,6 +3,8 @@ import org.apache.spark.sql.types.{IntegerType, StringType, StructType, StructFi
 import java.time.LocalDateTime
 import java.time.Duration
 
+val start = LocalDateTime.now()
+
 val schemaNation = StructType(Array(
   StructField("n_nationkey", LongType),
   StructField("n_name", StringType),
@@ -89,9 +91,9 @@ var i = 0
 for (s <- schemas) {
   print("Create view " + names(i) + "\n")
   val dfr = spark.read.format("kite").schema(s)
-      .option("host", "51a81ebac1c3:7878")
-      .option("path", "vitessedata-public/tpch/sf1/csv/" + names(i) + ".*")
-      .option("filespec", "csv")
+      .option("host", "kite1:7878")
+      .option("path", "vitessedata-public/tpch/sf30/parquet/" + names(i) + "/*")
+      .option("filespec", "parquet")
       .option("csv_delim", "|")
       .option("fragcnt", 32)
 
