@@ -1,27 +1,22 @@
 #!/bin/bash
 
-query=${1:-all}
+source ../env.sh
 
-outpath=/tmp/tpch_spark_out
+connector=${1:-kite}
+query=${2:-all}
 
-mkdir -p $outpath
+mkdir -p $OUTDIR/spark
 
-source env.sh
+for q in "${TPCH_QUERIES[@]}"; do
+   [ $query != "all" ] && [ $query != "$q" ] && continue
 
-for i in {1..22};
-do
-	[ $query != "all" ] && [ $query != "q${i}" ] && continue
+   OUT=$OUTDIR/spark/$q.out
 
-	t1=$(($(date +%s%N)/1000000))
-
-	OUT=$outpath/q${i}.out
-
-	spark-shell --master local[32] -i query/views.scala -i query/q${i}.scala > $OUT
+	spark-shell --master local[$SPARK_WORKER] \
+		-i query/views_${connector}.scala \
+		-i query/${q}.scala 2>&1 > $OUT
 	
-	t2=$(($(date +%s%N)/1000000))
-
-	dur=$(( $t2 - $t1 ))
 	dur=`grep Time $OUT | tail -1 | cut -f2 -d ' '`
 
-	echo "q${i} $dur ms"
+	echo "${q} $dur ms"
 done
