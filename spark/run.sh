@@ -12,11 +12,18 @@ for q in "${TPCH_QUERIES[@]}"; do
 
    OUT=$OUTDIR/spark/$q.out
 
-	spark-shell --master local[$SPARK_WORKER] \
-		-i query/views_${connector}.scala \
-		-i query/${q}.scala > $OUT 2>&1
+	cat query/views_${connector}.scala query/${q}.scala \
+		| sed -e "s/:KITE_LOCATION/$KITE_LOCATION/" \
+		| sed -e "s/:TPCH_SF/sf$TPCH_SF/" \
+		| sed -e "s/:DATA_FORMAT/$DATA_FORMAT/" \
+		| sed -e "s/:SPARK_WORKER/$SPARK_WORKER/" \
+		| spark-shell > $OUT 2>&1
+
+	#spark-shell --master local[$SPARK_WORKER] \
+	#	-i query/views_${connector}.scala \
+	#	-i query/${q}.scala > $OUT 2>&1
 	
-	dur=`grep "^Time" $OUT | tail -1 | cut -f2 -d ' '`
+	dur=`grep "^Time:" $OUT | tail -1 | cut -f2 -d ' '`
 
 	echo "${q} $dur ms"
 done

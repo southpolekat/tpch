@@ -7,7 +7,7 @@ import java.time.Duration
 val start = LocalDateTime.now()
 
 /* parquet */
-var df = spark.read.parquet("s3a://vitessedata-public/tpch/sf30/parquet/lineitem/*")
+var df = spark.read.parquet("s3a://vitessedata-public/tpch/:TPCH_SF/parquet/lineitem/*")
 
 /* csv */
 /*

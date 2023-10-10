@@ -91,11 +91,11 @@ var i = 0
 for (s <- schemas) {
   print("Create view " + names(i) + "\n")
   val dfr = spark.read.format("kite").schema(s)
-      .option("host", "kite1:7878")
-      .option("path", "vitessedata-public/tpch/sf30/parquet/" + names(i) + "/*")
-      .option("filespec", "parquet")
+      .option("host", ":KITE_LOCATION")
+      .option("path", "vitessedata-public/tpch/:TPCH_SF/:DATA_FORMAT/" + names(i) + "/*")
+      .option("filespec", ":DATA_FORMAT")
       .option("csv_delim", "|")
-      .option("fragcnt", 32)
+      .option("fragcnt", :SPARK_WORKER)
 
   val df = dfr.load()
 
