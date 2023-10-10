@@ -10,7 +10,7 @@ export KITE_LOCATION=kite1:7878
 
 ############################# DATA
 # Scale factor: 1 or 30
-export TPCH_SF=1
+export TPCH_SF=30
 export TPCH_TABLES=(lineitem)
 export TPCH_QUERIES=(q1 q6)
 # Source data file format: csv or parquet 
