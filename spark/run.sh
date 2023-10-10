@@ -14,9 +14,9 @@ for q in "${TPCH_QUERIES[@]}"; do
 
 	spark-shell --master local[$SPARK_WORKER] \
 		-i query/views_${connector}.scala \
-		-i query/${q}.scala 2>&1 > $OUT
+		-i query/${q}.scala > $OUT 2>&1
 	
-	dur=`grep Time $OUT | tail -1 | cut -f2 -d ' '`
+	dur=`grep "^Time" $OUT | tail -1 | cut -f2 -d ' '`
 
 	echo "${q} $dur ms"
 done
