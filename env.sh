@@ -35,3 +35,9 @@ export GP_SCHEMA_AO=ao
 export GP_SCHEMA_KITE=kite
 # Views use all internal tables except lineitem 
 export GP_SCHEMA_MIXED=mixed
+# All tables are external pxf tables
+export GP_SCHEMA_PXF=pxf
+
+############################# AWS  
+export AWS_ACCESS_KEY=$(grep aws_access_key_id ~/.aws/credentials | cut -f3 -d ' ')
+export AWS_SECRET_KEY=$(grep aws_secret_access_key ~/.aws/credentials | cut -f3 -d ' ')

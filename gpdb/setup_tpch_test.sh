@@ -5,6 +5,37 @@ source ../env.sh
 opts="-c client_min_messages=warning -c optimizer=0" # for PGOPTIONS
 psql="psql -v ON_ERROR_STOP=1 -q"
 
+function setup_schema_pxf {
+   schema=$GP_SCHEMA_PXF
+   echo "############# Schema $schema"
+
+   echo "### Recreate schema"
+   PGOPTIONS=$opts $psql -c "Drop schema if exists $schema CASCADE"
+   PGOPTIONS=$opts $psql -c "Create schema $schema"
+
+   opts2="$opts --search_path=$schema"
+
+   echo "### Create external tables"
+   cat schema/pxf/tables.ddl \
+      | sed -e "s/:KITE_LOCATION/$KITE_LOCATION/" \
+      | sed -e "s/:TPCH_SF/sf$TPCH_SF/" \
+      | sed -e "s/:DATA_FORMAT/$DATA_FORMAT/g" \
+      | sed -e "s/:AWS_ACCESS_KEY/$AWS_ACCESS_KEY/" \
+      | sed -e "s/:AWS_SECRET_KEY/$AWS_SECRET_KEY/" \
+      | PGOPTIONS=${opts2} $psql
+
+   #echo "### Analyze tables"
+   #PGOPTIONS=${opts2} $psql -Atf query/analyze.sql
+
+   echo "### Count rows"
+   PGOPTIONS=${opts2} $psql -Atf query/counts.sql
+
+   echo "### Create views"
+   for i in {1..22}; do
+         PGOPTIONS=${opts2} $psql -f query/q${i}.sql
+   done
+}
+
 function setup_schema_kite {
 	schema=$GP_SCHEMA_KITE
 	echo "############# Schema $schema"
@@ -90,6 +121,7 @@ function setup_schema_mixed {
 	done
 }
 
+setup_schema_pxf
 setup_schema_kite
 setup_schema_ao
 setup_schema_mixed
