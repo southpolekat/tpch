@@ -2,12 +2,9 @@
 
 source ../env.sh
 
-aws_access_key_id=$(grep aws_access_key_id ~/.aws/credentials | cut -f3 -d ' ')
-aws_secret_access_key=$(grep aws_secret_access_key ~/.aws/credentials | cut -f3 -d ' ')
-
 cat conf/spark-defaults.conf \
-	| sed -e "s/spark.hadoop.fs.s3a.access.key.*/& $aws_access_key_id/" \
-	| sed -e "s/spark.hadoop.fs.s3a.secret.key.*/& $aws_secret_access_key/" \
+	| sed -e "s/spark.hadoop.fs.s3a.access.key.*/& $AWS_ACCESS_KEY/" \
+	| sed -e "s/spark.hadoop.fs.s3a.secret.key.*/& $AWS_SECRET_KEY/" \
 	> ${SPARK_HOME}/conf/spark-defaults.conf
 
 cd ${SPARK_HOME}/jars
